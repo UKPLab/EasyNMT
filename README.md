@@ -39,7 +39,7 @@ from easynmt import EasyNMT
 model = EasyNMT('opus-mt')
 
 #Translate a single sentence to German
-print(model.translate('This is a sentence we want to translate to German', source_lang='en', target_lang='de'))
+print(model.translate('This is a sentence we want to translate to German', target_lang='de'))
 
 #Translate several sentences to German
 sentences = ['You can define a list with sentences.',
@@ -77,8 +77,7 @@ You can set the `source_lang` for the `translate` method to define the source la
 from easynmt import EasyNMT
 model = EasyNMT('opus-mt')
 
-
-#Translate several sentences to German
+#Translate several sentences to English
 sentences = ['Dies ist ein Satz in Deutsch.',   #This is a German sentence
              '这是一个中文句子',    #This is a chinese sentence
              'Esta es una oración en español.'] #This is a spanish sentence
