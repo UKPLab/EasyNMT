@@ -28,11 +28,6 @@ pip install -U easynmt
 The models are based on **PyTorch**. If you have a GPU available, see how to install  **[PyTorch with GPU support](https://pytorch.org/get-started/locally/)**.
 
 ## Usage
-
-
-
-
-
 The usage is simple:
 ```python
 from easynmt import EasyNMT
@@ -56,7 +51,6 @@ The `translate()` performs automatic sentence splitting to be able to translate 
 ```python
 from easynmt import EasyNMT
 model = EasyNMT('opus-mt')
-
 
 document = """Berlin is the capital and largest city of Germany by both area and population.[6][7] Its 3,769,495 inhabitants as of 31 December 2019[2] make it the most-populous city of the European Union, according to population within city limits.[8] The city is also one of Germany's 16 federal states. It is surrounded by the state of Brandenburg, and contiguous with Potsdam, Brandenburg's capital. The two cities are at the center of the Berlin-Brandenburg capital region, which is, with about six million inhabitants and an area of more than 30,000 km2,[9] Germany's third-largest metropolitan region after the Rhine-Ruhr and Rhine-Main regions. Berlin straddles the banks of the River Spree, which flows into the River Havel (a tributary of the River Elbe) in the western borough of Spandau. Among the city's main topographical features are the many lakes in the western and southeastern boroughs formed by the Spree, Havel, and Dahme rivers (the largest of which is Lake Müggelsee). Due to its location in the European Plain, Berlin is influenced by a temperate seasonal climate. About one-third of the city's area is composed of forests, parks, gardens, rivers, canals and lakes.[10] The city lies in the Central German dialect area, the Berlin dialect being a variant of the Lusatian-New Marchian dialects.
 
@@ -156,11 +150,8 @@ As soon as you call `EasyNMT('m2m_100_418M')` / `EasyNMT('m2m_100_1.2B')`, the r
 
 
 ## Author
-The main contributor of this repository is:
-- [Nils Reimers](https://www.nils-reimers.de)
 
-
-Contact person: Nils Reimers, info@nils-reimers.de
+Contact person: [Nils Reimers](https://www.nils-reimers.de); [reimers@ukp.informatik.tu-darmstadt.de](mailto:reimers@ukp.informatik.tu-darmstadt.de)
 
 https://www.ukp.tu-darmstadt.de/
 
