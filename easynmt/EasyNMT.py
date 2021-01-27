@@ -351,7 +351,7 @@ class EasyNMT:
                 http_get('https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.ftz', model_path)
             self._fasttext_lang_id = fasttext.load_model(model_path)
 
-        return self._fasttext_lang_id.predict(text.replace("\r\n", " ").replace("\n", " ").strip())[0][0].split('__')[-1]
+        return self._fasttext_lang_id.predict(text.lower().replace("\r\n", " ").replace("\n", " ").strip())[0][0].split('__')[-1]
 
     def sentence_splitting(self, text: str, lang: str = None):
         if lang == 'th':
