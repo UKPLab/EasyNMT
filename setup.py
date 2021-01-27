@@ -5,7 +5,7 @@ with open("README.md", mode="r", encoding="utf-8") as readme_file:
 
 setup(
     name="EasyNMT",
-    version="0.0.8",
+    version="1.0.0",
     author="Nils Reimers",
     author_email="info@nils-reimers.de",
     description="Easy to use state-of-the-art Neural Machine Translation",
@@ -13,7 +13,7 @@ setup(
     long_description_content_type="text/markdown",
     license="Apache License 2.0",
     url="https://github.com/UKPLab/EasyNMT",
-    download_url="https://github.com/UKPLab/EasyNMT/archive/v0.1.0.zip",
+    download_url="https://github.com/UKPLab/EasyNMT/archive/v1.0.0.zip",
     packages=find_packages(),
     install_requires=[
         'tqdm',

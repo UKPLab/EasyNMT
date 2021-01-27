@@ -116,8 +116,8 @@ class EasyNMT:
                         if len(sent) > 0:
                             splitted_sentences.append(sent)
                 sent2doc.append(len(splitted_sentences))
-            logger.info("Sentence splitting done after: {:.2f} sec".format(time.time() - start_time))
-            logger.info("Translate {} sentences".format(len(splitted_sentences)))
+            #logger.info("Sentence splitting done after: {:.2f} sec".format(time.time() - start_time))
+            #logger.info("Translate {} sentences".format(len(splitted_sentences)))
 
             translated_sentences = self.translate_sentences(splitted_sentences, target_lang=target_lang, source_lang=source_lang, show_progress_bar=show_progress_bar, beam_size=beam_size, batch_size=batch_size, **kwargs)
 
@@ -129,7 +129,7 @@ class EasyNMT:
                 end_idx = sent2doc[doc_idx]
                 translated_docs.append(self._reconstruct_document(documents[doc_idx], splitted_sentences[start_idx:end_idx], translated_sentences[start_idx:end_idx]))
 
-            logger.info("Document reconstruction done after: {:.2f} sec".format(time.time() - start_time))
+            #logger.info("Document reconstruction done after: {:.2f} sec".format(time.time() - start_time))
         else:
             translated_docs = self.translate_sentences(documents, target_lang=target_lang, source_lang=source_lang, show_progress_bar=show_progress_bar, beam_size=beam_size, batch_size=batch_size, **kwargs)
 
@@ -288,7 +288,7 @@ class EasyNMT:
 
     def translate_stream(self, stream: Iterable[str], show_progress_bar: bool = True, chunk_size: int = 128, **kwargs) -> List[str]:
         batch = []
-        for doc in tqdm.tqdm(stream, smoothing=0.05, disable=not show_progress_bar):
+        for doc in tqdm.tqdm(stream, smoothing=0.0, disable=not show_progress_bar):
             batch.append(doc)
 
             if len(batch) >= chunk_size:
