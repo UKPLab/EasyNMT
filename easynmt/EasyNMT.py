@@ -389,12 +389,13 @@ class EasyNMT:
         for lang_pair in self.lang_pairs:
             source, target = lang_pair.split("-")
 
-            if source_lang is not None and source != source_lang:
-                continue
-            if target_lang is not None and target != target_lang:
-                continue
+            if source_lang is None and target_lang is None:
+                langs.add(source)
+                langs.add(target)
+            elif target_lang is not None and target == target_lang:
+                langs.add(source)
+            elif source_lang is not None and source == source_lang:
+                langs.add(target)
 
-            langs.add(source)
-            langs.add(target)
         return sorted(list(langs))
 
