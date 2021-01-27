@@ -1,3 +1,7 @@
+"""
+The code in this file is based on:
+https://github.com/pytorch/fairseq/blob/master/fairseq_cli/interactive.py
+"""
 import sentencepiece as spm
 from omegaconf import OmegaConf
 import ast
