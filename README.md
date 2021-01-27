@@ -88,8 +88,8 @@ The following models are currently available. They provide translations between 
 | --- | --- | :---: | :---: | :---: | :---: | --- |
 | opus-mt | [Helsinki-NLP](https://github.com/Helsinki-NLP/Opus-MT) | 186 | 300 MB | 53 | 6 | Inidivudal models  (~300 MB) per translation direction
 | mbart50_m2m | [Facebook Research](https://github.com/pytorch/fairseq/tree/master/examples/multilingual) | 52 |  1.2 GB | 35  | 0.9| 
-| m2m_100_418M | [Facebook Research](https://github.com/pytorch/fairseq/tree/master/examples/m2m_100) | 127 | 0.9 GB | 39 | 1.1 | 
-| m2m_100_1.2B | [Facebook Research](https://github.com/pytorch/fairseq/tree/master/examples/m2m_100) | 127 | 2.4 GB | 23 |0.5 | 
+| m2m_100_418M | [Facebook Research](https://github.com/pytorch/fairseq/tree/master/examples/m2m_100) | 100 | 0.9 GB | 39 | 1.1 | 
+| m2m_100_1.2B | [Facebook Research](https://github.com/pytorch/fairseq/tree/master/examples/m2m_100) | 100 | 2.4 GB | 23 |0.5 | 
 
 ## Translation Quality
 
@@ -126,11 +126,11 @@ model = EasyNMT('mbart50_m2m')
 **Supported languages**: af, ar, az, bn, cs, de, en, es, et, fa, fi, fr, gl, gu, he, hi, hr, id, it, ja, ka, kk, km, ko, lt, lv, mk, ml, mn, mr, my, ne, nl, pl, ps, pt, ro, ru, si, sl, sv, sw, ta, te, th, tl, tr, uk, ur, vi, xh, zh  
 
 ## M2M_100
-We provide a wrapper for the [M2M 100](https://arxiv.org/abs/2010.11125) model from Facebook, that is able to translate between any pair of 100+ languages.
+We provide a wrapper for the [M2M 100](https://arxiv.org/abs/2010.11125) model from Facebook, that is able to translate between any pair of 100 languages.
 
 
 
-**Supported languages**: af, am, ar, arbt, ast, az, azbt, ba, be, bebt, bg, bgbt, bn, bnbt, br, bs, ca, ceb, cs, csbt, cy, da, de, debt, el, en, es, esbt, et, etbt, fa, fabt, ff, fi, fr, frbt, fy, ga, gd, gl, gu, ha, he, hebt, hi, hibt, hr, ht, hu, hubt, hy, hybt, id, ig, ilo, is, it, ja, jabt, jv, ka, kabt, kk, km, kn, ko, kobt, lb, lg, ln, lo, lt, lv, mg, mk, mkbt, ml, mn, mr, mrbt, ms, msbt, my, ne, nebt, nl, no, ns, oc, or, pa, pl, ps, pt, ro, robt, ru, sd, si, sk, sl, so, sq, sr, srbt, ss, su, sv, sw, ta, th, tl, tn, tr, trbt, uk, ur, uz, vi, vibt, wo, xh, yi, yo, zh, zhbt, zu
+**Supported languages**: af, am, ar, ast, az, ba, be, bg, bn, br, bs, ca, ceb, cs, cy, da, de, el, en, es, et, fa, ff, fi, fr, fy, ga, gd, gl, gu, ha, he, hi, hr, ht, hu, hy, id, ig, ilo, is, it, ja, jv, ka, kk, km, kn, ko, lb, lg, ln, lo, lt, lv, mg, mk, ml, mn, mr, ms, my, ne, nl, no, ns, oc, or, pa, pl, ps, pt, ro, ru, sd, si, sk, sl, so, sq, sr, ss, su, sv, sw, ta, th, tl, tn, tr, uk, ur, uz, vi, wo, xh, yi, yo, zh, zu
 
 
 
