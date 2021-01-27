@@ -4,7 +4,7 @@ This class provides easy to use, state-of-the-art machine translation for more t
 - Easy installation and usage: Use state-of-the-art machine translation with 3 lines of code
 - Automatic download of pre-trained machine translation models
 - Translation between 150+ languages
-- Automatic language detection
+- Automatic language detection for 170+ languages
 - Sentence and document translation
 - Multi-GPU and multi-process translation
 
