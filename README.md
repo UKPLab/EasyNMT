@@ -1,5 +1,5 @@
 # EasyNMT - Easy to use, state-of-the-art Neural Machine Translation
-This class provides easy to use, state-of-the-art machine translation for more than 100+ languages. The highlights of this package are:
+This package provides easy to use, state-of-the-art machine translation for more than 100+ languages. The highlights of this package are:
 
 - Easy installation and usage: Use state-of-the-art machine translation with 3 lines of code
 - Automatic download of pre-trained machine translation models
