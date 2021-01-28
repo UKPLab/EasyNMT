@@ -25,7 +25,7 @@ You can install the package via:
 pip install -U easynmt
 ```
 
-The models are based on **PyTorch**. If you have a GPU available, see how to install  **[PyTorch with GPU support](https://pytorch.org/get-started/locally/)**.
+The models are based on **PyTorch**. If you have a GPU available, see how to install  **[PyTorch with GPU support](https://pytorch.org/get-started/locally/)**. If you use Windows and have issues with the installation, see [this issue](https://github.com/UKPLab/EasyNMT/issues/3) how to solve it.
 
 ## Usage
 The usage is simple:
