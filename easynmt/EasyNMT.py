@@ -20,6 +20,8 @@ logger = logging.getLogger(__name__)
 class EasyNMT:
     def __init__(self, model_name: str, cache_folder: str = None, translator=None, device=None, **kwargs):
         self._fasttext_lang_id = None
+        self._lang_detectors = [self.language_detection_fasttext, self.language_detection_langid, self.language_detection_langdetect]
+
         self.config = None
 
         if cache_folder is None:
@@ -335,13 +337,31 @@ class EasyNMT:
 
     def language_detection(self, text: str) -> str:
         """
+       Given a text, detects the language code and returns the ISO language code.
+       It test different language detectors, based on what is available:
+       fastText, langid, langdetect.
+
+       You can change the language detector order by changing model._lang_detectors
+       :param text: Text for which we want to determine the language
+       :return: ISO language code
+       """
+
+        for lang_detector in self._lang_detectors:
+            try:
+                return lang_detector(text)
+            except:
+                pass
+
+        raise Exception("No method for automatic language detection was found. Please install at least one of the following: fasttext (pip install fasttext), langid (pip install langid), or langdetect (pip install langdetect)")
+
+    def language_detection_fasttext(self, text: str) -> str:
+        """
         Given a text, detects the language code and returns the ISO language code. It supports 176 languages. Uses
         the fasttext model for language detection:
         https://fasttext.cc/blog/2017/10/02/blog-post.html
         https://fasttext.cc/docs/en/language-identification.html
 
-        :param text: Text for which we want to determine the language
-        :return: ISO language code
+
         """
         if self._fasttext_lang_id is None:
             import fasttext
@@ -352,6 +372,16 @@ class EasyNMT:
             self._fasttext_lang_id = fasttext.load_model(model_path)
 
         return self._fasttext_lang_id.predict(text.lower().replace("\r\n", " ").replace("\n", " ").strip())[0][0].split('__')[-1]
+
+    def language_detection_langid(self, text: str) -> str:
+        import langid
+        return langid.classify(text.replace("\r\n", " ").replace("\n", " ").strip())[0]
+
+
+    def language_detection_langdetect(self, text: str) -> str:
+        import langdetect
+        return langdetect.detect(text.replace("\r\n", " ").replace("\n", " ").strip())
+
 
     def sentence_splitting(self, text: str, lang: str = None):
         if lang == 'th':
