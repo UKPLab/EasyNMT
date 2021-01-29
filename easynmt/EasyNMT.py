@@ -375,12 +375,12 @@ class EasyNMT:
 
     def language_detection_langid(self, text: str) -> str:
         import langid
-        return langid.classify(text.replace("\r\n", " ").replace("\n", " ").strip())[0]
+        return langid.classify(text.lower().replace("\r\n", " ").replace("\n", " ").strip())[0]
 
 
     def language_detection_langdetect(self, text: str) -> str:
         import langdetect
-        return langdetect.detect(text.replace("\r\n", " ").replace("\n", " ").strip())
+        return langdetect.detect(text.lower().replace("\r\n", " ").replace("\n", " ").strip())
 
 
     def sentence_splitting(self, text: str, lang: str = None):
