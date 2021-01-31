@@ -18,9 +18,22 @@ logger = logging.getLogger(__name__)
 
 
 class EasyNMT:
-    def __init__(self, model_name: str, cache_folder: str = None, translator=None, device=None, **kwargs):
+    def __init__(self, model_name: str, cache_folder: str = None, translator=None, load_translator: bool = True, device=None, **kwargs):
+        """
+        Easy-to-use, state-of-the-art machine translation
+        :param model_name:  Model name (see Readme for available models)
+        :param cache_folder: Which folder should be used for caching models. Can also be set via the EASYNMT_CACHE env. variable
+        :param translator: Translator object. Set to None, to automatically load the model via the model name.
+        :param load_translator: If set to false, it will only load the config but not the translation engine
+        :param device: CPU / GPU device for PyTorch
+        :param kwargs: Further optional parameters for the different models
+        """
         self._fasttext_lang_id = None
         self._lang_detectors = [self.language_detection_fasttext, self.language_detection_langid, self.language_detection_langdetect]
+
+        if device is None:
+            device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        self.device = device
 
         self.config = None
 
@@ -65,14 +78,12 @@ class EasyNMT:
             with open(os.path.join(model_path, 'easynmt.json')) as fIn:
                 self.config = json.load(fIn)
 
-            if device is None:
-                device = 'cuda' if torch.cuda.is_available() else 'cpu'
-            self.device = device
-
-            module_class = import_from_string(self.config['model_class'])
-            self.translator = module_class(model_path, **kwargs)
-
             self._lang_pairs = frozenset(self.config['lang_pairs'])
+
+            if load_translator:
+                module_class = import_from_string(self.config['model_class'])
+                self.translator = module_class(model_path, **kwargs)
+
 
 
 
