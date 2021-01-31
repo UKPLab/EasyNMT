@@ -89,7 +89,8 @@ class EasyNMT:
 
     def translate(self, documents: Union[str, List[str]], target_lang: str, source_lang: str = None,
                   show_progress_bar: bool = False, beam_size: int = 5, batch_size: int = 16,
-                  perform_sentence_splitting: bool = True, paragraph_split: str = "\n", sentence_splitter=None, **kwargs):
+                  perform_sentence_splitting: bool = True, paragraph_split: str = "\n", sentence_splitter=None,  document_language_detection: bool = True,
+                  **kwargs):
         """
         This method translates the given set of documents
         :param documents: If documents is a string, returns the translated document as string. If documents is a list of strings, translates all documents and returns a list.
@@ -101,9 +102,16 @@ class EasyNMT:
         :param perform_sentence_splitting: Longer documents are broken down sentences, which are translated individually
         :param paragraph_split: Split symbol for paragraphs. No sentences can go across the paragraph_split symbol.
         :param sentence_splitter: Method used to split sentences. If None, uses the default self.sentence_splitting method
+        :param document_language_detection: Perform language detection on document level
         :param kwargs: Optional arguments for the translator model
         :return: Returns a string or a list of string with the translated documents
         """
+
+        #Method_args will store all passed arguments to method
+        method_args = locals()
+        del method_args['self']
+        del method_args['kwargs']
+        method_args.update(kwargs)
 
         if source_lang == target_lang:
             return documents
@@ -112,6 +120,37 @@ class EasyNMT:
         if isinstance(documents, str):
             documents = [documents]
             is_single_doc = True
+
+        if source_lang is None and document_language_detection:
+            src_langs = [self.language_detection(doc) for doc in documents]
+            
+            # Group by languages
+            lang2id = {}
+            for idx, lng in enumerate(src_langs):
+                if lng not in lang2id:
+                    lang2id[lng] = []
+                lang2id[lng].append(idx)
+
+            # Translate language wise
+            output = [None] * len(documents)
+            for lng, ids in lang2id.items():
+                logger.info("Translate documents of language: {}".format(lng))
+                try:
+                    grouped_docs = [documents[idx] for idx in ids]
+                    method_args['documents'] = grouped_docs
+                    method_args['source_lang'] = lng
+                    translated = self.translate(**method_args)
+                    for idx, translated_sentences in zip(ids, translated):
+                        output[idx] = translated_sentences
+                except Exception as e:
+                    logger.warning("Exception: "+str(e))
+                    raise e
+
+            if is_single_doc and len(output) == 1:
+                output = output[0]
+
+            return output
+
 
         if perform_sentence_splitting:
             if sentence_splitter is None:
@@ -197,7 +236,6 @@ class EasyNMT:
             #Determine languages for sentences
             src_langs = [self.language_detection(sent) for sent in sentences]
             logger.info("Detected languages: {}".format(set(src_langs)))
-
 
             #Group by languages
             lang2id = {}
