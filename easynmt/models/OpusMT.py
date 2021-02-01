@@ -41,7 +41,7 @@ class OpusMT:
             self.models[model_name] = {'tokenizer': tokenizer, 'model': model, 'last_loaded': time.time()}
             return tokenizer, model
 
-    def translate_sentences(self, sentences: List[str], source_lang: str, target_lang: str, device: str, beam_size: int = 5, max_length: int = None):
+    def translate_sentences(self, sentences: List[str], source_lang: str, target_lang: str, device: str, beam_size: int = 5, max_length: int = None, do_sample=False, top_k=50, top_p=1.0):
         model_name = 'Helsinki-NLP/opus-mt-{}-{}'.format(source_lang, target_lang)
         tokenizer, model = self.load_model(model_name)
         model.to(device)
@@ -52,7 +52,7 @@ class OpusMT:
             inputs[key] = inputs[key].to(device)
 
         with torch.no_grad():
-            translated = model.generate(**inputs, num_beams=beam_size)
+            translated = model.generate(**inputs, num_beams=beam_size, do_sample=do_sample, top_k=top_k, top_p=top_p)
             output = [tokenizer.decode(t, skip_special_tokens=True) for t in translated]
 
         return output
