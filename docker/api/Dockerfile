@@ -26,12 +26,12 @@ COPY ./gunicorn_conf_frontend.py /gunicorn_conf_frontend.py
 
 
 #####
-COPY ../api/requirements.txt /requirements.txt
+COPY ./requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt
 
 ####
 
-COPY ../api /app
+COPY ./src /app
 WORKDIR /app/
 ENV PYTHONPATH=/app
 EXPOSE 80
