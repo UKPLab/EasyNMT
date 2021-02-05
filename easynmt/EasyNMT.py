@@ -258,7 +258,7 @@ class EasyNMT:
                     raise e
         else:
             #Sort by length to speed up processing
-            length_sorted_idx = np.argsort([len(sen) for sen in sentences])
+            length_sorted_idx = np.argsort([-len(sen) for sen in sentences])
             sentences_sorted = [sentences[idx] for idx in length_sorted_idx]
 
             iterator = range(0, len(sentences_sorted), batch_size)
