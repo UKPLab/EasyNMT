@@ -72,14 +72,20 @@ async def translate(target_lang: str, text: List[str] = Query([]), source_lang: 
         if beam_size < 1 or ('EASYNMT_MAX_BEAM_SIZE' in os.environ and beam_size > int(os.getenv('EASYNMT_MAX_BEAM_SIZE'))):
             raise ValueError("Illegal beam size")
 
-
-        #Start the translation
-        start_time = time.time()
-
         if len(source_lang.strip()) == 0:
             source_lang = None
 
+        #Start the translation
+        start_time = time.time()
         output = {"target_lang": target_lang, "source_lang": source_lang}
+
+
+        if source_lang is None:
+            detected_langs = model.language_detection(text)
+            output['detected_langs'] = detected_langs
+            #TODO Grouping and individual translation
+            #Exception: add original text
+
 
         try:
             output['translated'] = model.translate(text, target_lang=target_lang, source_lang=source_lang, beam_size=beam_size, perform_sentence_splitting=perform_sentence_splitting, batch_size=int(os.getenv('EASYNMT_BATCH_SIZE', 16)))
