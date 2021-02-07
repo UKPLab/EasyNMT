@@ -34,7 +34,7 @@ print("Booted as backend: {}".format(IS_BACKEND))
 model_name = os.getenv('EASYNMT_MODEL', 'opus-mt')
 model_args = json.loads(os.getenv('EASYNMT_MODEL_ARGS', '{}') )
 print("Load model: "+ model_name)
-model = EasyNMT(model_name, load_translator=not IS_BACKEND, **model_args)
+model = EasyNMT(model_name, load_translator=IS_BACKEND, **model_args)
 
 
 
@@ -108,16 +108,35 @@ async def get_languages(source_lang: Optional[str] = None, target_lang: Optional
 
 @app.get("/language_detection")
 async def language_detection(text: str):
+    """
+    Detects the language for the provided text
+    :param text: A single text for which we want to know the language
+    :return: The detected language
+    """
     return model.language_detection(text)
 
 
 @app.post("/language_detection")
 async def language_detection_post(request: Request):
+    """
+    Pass a json that has a 'text' key. The 'text' element can either be a string, a list of strings, or
+    a dict.
+    :return: Languages detected
+    """
     data = await request.json()
     if isinstance(data['text'], list):
         return [model.language_detection(t) for t in data['text']]
+    elif isinstance(data['text'], dict):
+        return {k: model.language_detection(t) for k, t in data['text'].items()}
     return model.language_detection(data['text'])
 
 
 
 
+@app.get("/model_name")
+async def lang_pairs():
+    """
+    Returns the name of the loaded model
+    :return: EasyNMT model name
+    """
+    return model._model_name

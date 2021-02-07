@@ -19,11 +19,6 @@ RUN chmod +x /start.sh
 COPY ./gunicorn_conf_backend.py /gunicorn_conf_backend.py
 COPY ./gunicorn_conf_frontend.py /gunicorn_conf_frontend.py
 
-#COPY ./start-reload.sh /start-reload.sh
-#RUN chmod +x /start-reload.sh
-
-
-
 
 #####
 COPY ./requirements.txt /requirements.txt
@@ -39,6 +34,12 @@ EXPOSE 80
 ####
 
 # Run the start script
+VOLUME "/cache"
+ENV EASYNMT_CACHE=/cache/easynmt
+ENV TRANSFORMERS_CACHE=/cache/transformers
+ENV TORCH_CACHE=/cache/torch
+
+
 CMD ["/start.sh"]
 
 
