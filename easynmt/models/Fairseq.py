@@ -24,6 +24,8 @@ class Fairseq:
         with open(os.path.join(model_path, 'config.yaml')) as fIn:
             self.conf = OmegaConf.load(fIn)
 
+        self.max_length = self.conf.task.max_source_positions-2
+
         #Update paths in config
         self.conf.task.fixed_dictionary = os.path.join(model_path, self.conf.task.fixed_dictionary)
         self.conf.task.path = os.path.join(model_path, self.conf.task.path)
@@ -84,7 +86,7 @@ class Fairseq:
             raise ValueError("Translation for the language combination {}-{} not supported".format(source_lang, target_lang))
 
         if not is_tokenized:
-            sentences = [" ".join(self.tokenizer.EncodeAsPieces(sent)) for sent in sentences]
+            sentences = [" ".join(self.tokenizer.EncodeAsPieces(sent)[0:self.max_length]) for sent in sentences]
 
         for model in self.models:
             if model is not None:

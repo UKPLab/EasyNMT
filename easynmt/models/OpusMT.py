@@ -18,6 +18,7 @@ class OpusMT:
             self.config = json.load(fIn)
 
         self.max_loaded_models = max_loaded_models
+        self.max_length = None
 
     def load_model(self, model_name):
         if model_name in self.models:
@@ -41,12 +42,12 @@ class OpusMT:
             self.models[model_name] = {'tokenizer': tokenizer, 'model': model, 'last_loaded': time.time()}
             return tokenizer, model
 
-    def translate_sentences(self, sentences: List[str], source_lang: str, target_lang: str, device: str, beam_size: int = 5, max_length: int = None, **kwargs):
+    def translate_sentences(self, sentences: List[str], source_lang: str, target_lang: str, device: str, beam_size: int = 5, **kwargs):
         model_name = 'Helsinki-NLP/opus-mt-{}-{}'.format(source_lang, target_lang)
         tokenizer, model = self.load_model(model_name)
         model.to(device)
 
-        inputs = tokenizer.prepare_seq2seq_batch(sentences, max_length=max_length, return_tensors="pt")
+        inputs = tokenizer.prepare_seq2seq_batch(sentences, max_length=self.max_length, return_tensors="pt")
 
         for key in inputs:
             inputs[key] = inputs[key].to(device)

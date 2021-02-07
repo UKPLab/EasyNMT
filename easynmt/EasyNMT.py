@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class EasyNMT:
-    def __init__(self, model_name: str, cache_folder: str = None, translator=None, load_translator: bool = True, device=None, **kwargs):
+    def __init__(self, model_name: str, cache_folder: str = None, translator=None, load_translator: bool = True, device=None, max_length: int = None, **kwargs):
         """
         Easy-to-use, state-of-the-art machine translation
         :param model_name:  Model name (see Readme for available models)
@@ -26,6 +26,7 @@ class EasyNMT:
         :param translator: Translator object. Set to None, to automatically load the model via the model name.
         :param load_translator: If set to false, it will only load the config but not the translation engine
         :param device: CPU / GPU device for PyTorch
+        :param max_length: Max number of token per sentence for translation. Longer text will be truncated
         :param kwargs: Further optional parameters for the different models
         """
         self._fasttext_lang_id = None
@@ -83,6 +84,7 @@ class EasyNMT:
             if load_translator:
                 module_class = import_from_string(self.config['model_class'])
                 self.translator = module_class(model_path, **kwargs)
+                self.translator.max_length = max_length
 
 
 
