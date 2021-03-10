@@ -33,10 +33,10 @@ class OpusMT:
             if len(self.models) >= self.max_loaded_models:
                 oldest_time = time.time()
                 oldest_model = None
-                for model_name in self.models:
-                    if self.models[model_name]['last_loaded'] <= oldest_time:
-                        oldest_model = model_name
-                        oldest_time = self.models[model_name]['last_loaded']
+                for loaded_model_name in self.models:
+                    if self.models[loaded_model_name]['last_loaded'] <= oldest_time:
+                        oldest_model = loaded_model_name
+                        oldest_time = self.models[loaded_model_name]['last_loaded']
                 del self.models[oldest_model]
 
             self.models[model_name] = {'tokenizer': tokenizer, 'model': model, 'last_loaded': time.time()}
