@@ -23,7 +23,7 @@ setup(
         'nltk',
         'sentencepiece',
         'fasttext',
-        'fairseq>=0.10.1'
+        'fairseq>=0.10.1,<=0.10.2'
     ],
     extras_require={
      'fairseq': []

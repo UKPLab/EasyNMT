@@ -29,6 +29,7 @@ class EasyNMT:
         :param max_length: Max number of token per sentence for translation. Longer text will be truncated
         :param kwargs: Further optional parameters for the different models
         """
+        self._model_name = model_name
         self._fasttext_lang_id = None
         self._lang_detectors = [self.language_detection_fasttext, self.language_detection_langid, self.language_detection_langdetect]
 
@@ -74,7 +75,10 @@ class EasyNMT:
                             http_get(url, os.path.join(model_path_tmp, filename))
 
                     ##Rename tmp path
-                    os.rename(model_path_tmp, model_path)
+                    try:
+                        os.rename(model_path_tmp, model_path)
+                    except Exception:
+                        pass
 
             with open(os.path.join(model_path, 'easynmt.json')) as fIn:
                 self.config = json.load(fIn)
@@ -385,16 +389,18 @@ class EasyNMT:
             except queue.Empty:
                 break
 
-    def language_detection(self, text: str) -> str:
+    def language_detection(self, text: Union[str, List[str]]) -> str:
         """
        Given a text, detects the language code and returns the ISO language code.
        It test different language detectors, based on what is available:
        fastText, langid, langdetect.
 
        You can change the language detector order by changing model._lang_detectors
-       :param text: Text for which we want to determine the language
+       :param text: Text or a List of Texts for which we want to determine the language
        :return: ISO language code
        """
+        if isinstance(text, list):
+            return [self.language_detection(doc) for doc in text]
 
         for lang_detector in self._lang_detectors:
             try:
@@ -430,7 +436,7 @@ class EasyNMT:
 
     def language_detection_langdetect(self, text: str) -> str:
         import langdetect
-        return langdetect.detect(text.lower().replace("\r\n", " ").replace("\n", " ").strip())
+        return langdetect.detect(text.lower().replace("\r\n", " ").replace("\n", " ").strip()).split("-")[0]
 
 
     def sentence_splitting(self, text: str, lang: str = None):
