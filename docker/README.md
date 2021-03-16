@@ -14,7 +14,7 @@ This uses the CPU image. If you have GPU (CUDA), there are various GPU images av
 
 ## Usage
 
-After you started the Docker image, you can visit: [http://localhost:8000/translate?target_lang=en&text=Hallo%20Welt](http://localhost:8000/translate?target_lang=en&text=Hallo%20Welt)
+After you started the Docker image, you can visit: [http://localhost:24080/translate?target_lang=en&text=Hallo%20Welt](http://localhost:24080/translate?target_lang=en&text=Hallo%20Welt)
 
 This should yield the following JSON:
 ```
@@ -35,7 +35,8 @@ If you have started it with a different port, replace `24080` with the port you 
 Note, for the first translation, the respective models are downloaded. This might take some time. Consecutive calls will be faster.
 
 ## Programmatic Usage
-- **Python:** [python_query_api.py](examples/python_query_api.py)
+- **Python:** [python_query_api.py](examples/python_query_api.py) - Sending requests with Python to the EasyNMT Docker API.
+- **Vue.js:** [vue_js_frontend.html](examples/vue_js_frontend.html) Vue.js Code for our [demo](http://easynmt.net/demo/).
 
 ## Documentation
 

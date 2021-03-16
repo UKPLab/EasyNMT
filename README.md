@@ -18,7 +18,22 @@ At the moment, we provide the following models:
  - [EasyNMT Google Colab Example](https://colab.research.google.com/drive/1X47vgSiOphpxS5w_LPtjQgJmiSTNfRNC?usp=sharing)
  - [EasyNMT Opus-MT Online Demo](http://easynmt.net/demo)
 
-## Installation
+
+## Docker & REST-API
+
+We provide ready-to-use Docker images, that wrap EasyNMT in a REST API:
+```
+docker run -p 24080:80 easynmt/api:1.1-cpu
+```
+
+Calling the REST API:
+```
+http://localhost:24080/translate?target_lang=en&text=Hallo%20Welt
+```
+
+See [docker/](docker/) for more information on the different Docker images and the REST API endpoints.
+
+## Installation for Python
 You can install the package via:
 
 ```
@@ -77,6 +92,7 @@ sentences = ['Dies ist ein Satz in Deutsch.',   #This is a German sentence
              'Esta es una oración en español.'] #This is a spanish sentence
 print(model.translate(sentences, target_lang='en'))
 ```
+
 
 
 
@@ -151,7 +167,7 @@ As soon as you call `EasyNMT('m2m_100_418M')` / `EasyNMT('m2m_100_1.2B')`, the r
 
 ## Author
 
-Contact person: [Nils Reimers](https://www.nils-reimers.de); [reimers@ukp.informatik.tu-darmstadt.de](mailto:reimers@ukp.informatik.tu-darmstadt.de)
+Contact person: [Nils Reimers](https://www.nils-reimers.de); [info@nils-reimers.de](mailto:info@nils-reimers.de)
 
 https://www.ukp.tu-darmstadt.de/
 
