@@ -6,7 +6,7 @@ We provide a [Docker](https://www.docker.com/) based REST-API for EasyNMT: Send 
 
 To start the EasyNMT REST API on port `24080`run the following docker command:
 ```
-docker run -p 24080:80 easynmt/api:1.1.0-cpu
+docker run -p 24080:80 easynmt/api:1.1-cpu
 ```
 
 This uses the CPU image. If you have GPU (CUDA), there are various GPU images available. Have a look at our [Docker Hub Page](https://hub.docker.com/repository/docker/easynmt/api/tags?page=1&ordering=last_updated).
@@ -30,17 +30,53 @@ This should yield the following JSON:
     "translation_time": 22.163145542144775
 }
 ```
+If you have started it with a different port, replace `24080` with the port you chose.
 
 Note, for the first translation, the respective models are downloaded. This might take some time. Consecutive calls will be faster.
 
-The endpoi
+## Programmatic Usage
+- **Python:** [python_query_api.py](examples/python_query_api.py)
 
 ## Documentation
 
-To get an overview of all REST API endpoints, with all possible parameters and their description, you open the following url:
+To get an overview of all REST API endpoints, with all possible parameters and their description, you open the following url: [http://localhost:24080/docs](http://localhost:24080/docs)
+
+### Endpoints
+The following endpoints with the GET method are defined (i.e. you can call them like `http://localhost:24080/name?param1=val1&param2=val2`)
 
 ```
-http://localhost:24080/docs
+/translate
+    Translates the text to the given target language.
+    :param text: Text that should be translated
+    :param target_lang: Target language
+    :param source_lang: Language of text. Optional, if empty: Automatic language detection
+    :param beam_size: Beam size. Optional
+    :param perform_sentence_splitting: Split longer documents into individual sentences for translation. Optional
+    :return:  Returns a json with the translated text
+
+/language_detection
+    Detects the language for the provided text
+    :param text: A single text for which we want to know the language
+    :return: The detected language
+    
+/get_languages
+    Returns the languages the model supports
+    :param source_lang: Optional. Only return languages with this language as source
+    :param target_lang: Optional. Only return languages with this language as target
+    :return:
 ```
 
-If you have started it with a different port, replace `24080` with the port you chose.
+You can call the `/translate` and `/language_detection` also with a POST request, giving you the option to pass a list of multiple texts. Then all texts are translated and returned at once.
+
+### Environment Variables
+You can control the Docker image using various environment variables:
+- *MAX_WORKERS_BACKEND*: Number of worker processes for the translation. Default: 1
+- *MAX_WORKERS_FRONTEND*: Number of worker processes for language detection & model info. Default: 2
+- *EASYNMT_MODEL*: Which EasyNMT Model to load. Default: opus-mt
+- *EASYNMT_MODEL_ARGS*: Json encoded string with parameters when loading EasyNMT: Default: {}
+- *EASYNMT_MAX_TEXT_LEN*: Maximal text length for translation. Default: Not set
+- *EASYNMT_MAX_BEAM_SIZE*: Maximal beam size for translation. Default: Not set
+- *EASYNMT_BATCH_SIZE*: Batch size for translation. Default: 16
+- *TIMEOUT*: [Gunicorn timeout](https://docs.gunicorn.org/en/stable/settings.html#timeout). Default: 120
+
+All model files are stored at `/cache/`. You can mount this path to your host machine if you want to re-use previously downloaded models.

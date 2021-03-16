@@ -1,6 +1,7 @@
 FROM python:3.8-slim
 LABEL maintainer="Nils Reimers <info@nils-reimers>"
 
+RUN apt-get update && apt-get -y install -y procps
 RUN pip install --no-cache-dir torch==1.8.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
 
 ###################################### Same code for all docker files ###############
@@ -35,8 +36,7 @@ EXPOSE 80
 ####
 
 # Create cache folders
-RUN mkdir /cache/
-VOLUME /cache
+RUN mkdir /cache
 RUN mkdir /cache/easynmt
 RUN mkdir /cache/transformers
 RUN mkdir /cache/torch

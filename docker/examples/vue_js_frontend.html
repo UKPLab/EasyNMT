@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>EasyNMT - Demo</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+          integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
+          crossorigin="anonymous"/>
+
+    <!-- Vue.js development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+    <!-- Axios - Für AJAX Aufrufe -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+
+
+    <style>
+        html {
+            font-size: 14px;
+        }
+
+        @media (min-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+        }
+
+        .container {
+            max-width: 1140px;
+        }
+
+        .card-deck .card {
+            min-width: 220px;
+        }
+
+        .border-bottom {
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .box-shadow {
+            box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+    <h5 class="my-0 mr-md-auto font-weight-normal">EasyNMT</h5>
+
+    <a class="btn btn-outline-primary mx-2" href="https://github.com/UKPLab/EasyNMT" target="_blank"><i
+            class="fab fa-github"></i> Github</a>
+    <a class="btn btn-outline-primary mx-2"
+       href="https://colab.research.google.com/drive/1X47vgSiOphpxS5w_LPtjQgJmiSTNfRNC?usp=sharing" target="_blank"><i
+            class="fab fa-google"></i> Colab Example</a>
+    <a class="btn btn-outline-primary mx-2" href="https://twitter.com/Nils_Reimers" target="_blank"><i
+            class="fab fa-twitter"></i> Twitter</a>
+</div>
+
+<div class="container px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">EasyNMT</h1>
+    <p class="lead">EasyNMT - Easy to use, state-of-the-art Neural Machine Translation is an <a
+            href="https://github.com/UKPLab/EasyNMT" target="_blank">open-source project</a> which simplifies the usage
+        of state-of-the-art, transformer based Neural Machine Translation (NMT).</p>
+</div>
+
+<div class="container" id="app">
+    <div class="card-deck mb-3 text-center">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Input</h4>
+            </div>
+            <div class="card-body">
+                <textarea class="form-control" id="text" maxlength="200" rows="3" v-model="text"></textarea>
+
+                <table class="mt-2" style="width: 100%">
+                    <tr>
+                        <td align="left">
+                            Input language:<br>
+                        </td>
+                        <td>
+                            <select class="form-control" name="source_lang" id="source_lang" v-model="source_lang">
+                                <option value="">Detect automatically </option>
+                                <option v-for="[code, lang] in Object.entries(source_langs)" :value="code">{{lang}}</option>
+                            </select>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">Target language:</td>
+                        <td>
+                            <select class="form-control mt-1" v-model="target_lang" id="target_lang">
+                                <option v-for="entry in target_langs" :value="entry.code" :disabled="entry.disabled">
+                                    {{entry.lang}} <template v-if="entry.disabled">(not available)</template>
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr v-if="source_lang == ''">
+                        <td align="left">Detected language:</td>
+                        <td height="44">{{(detected_lang in langs) ? langs[detected_lang] : detected_lang}}</td>
+                    </tr>
+                    <tr>
+                        <td align="left" width="160">Model:</td>
+                        <td height="44">
+                            opus-mt
+                        </td>
+                    </tr>
+
+                </table>
+
+
+                <button type="button" id="translate_button" class="btn btn-lg btn-block btn-outline-primary mt-2"
+                        v-on:click="translateText()" :disabled="is_translating">
+                    <div>
+                        <span class="fas fa-language" style="font-size: 1.5em; vertical-align: middle;"></span>
+                        <span class="my-text">Translate</span>
+                    </div>
+
+                </button>
+            </div>
+        </div>
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Output</h4>
+            </div>
+            <div class="card-body">
+                <div v-if="is_translating">
+                    <i class="fas fa-spinner fa-spin"></i> Please wait. A slow $10 CPU machine is translating your text. If it takes more than a second, the respective model must be downloaded which takes up to 60 seconds.
+                </div>
+                <div v-else>
+                    {{translated_text}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container pb-5 mb-5">
+    <h2>Information</h2>
+    This demo is using the <i>opus-mt</i> model: It provides small models (about 300 MB) for 1200+ different language
+    direction. EasyNMT detects and loads automatically the right translation model. In this demo, we restricted the
+    language selection to about 50 languages. <br><br>
+
+    <b>Notes:</b>
+    <ul>
+        <li>When a language direction is used for the first time, it has to be <b>downloaded</b>, which takes up to 60
+            seconds. Subsequent calls will be much faster, as the loaded model can be re-used.
+        </li>
+        <li>Opus-MT sadly doesn't have translation models for all language directions. In that case, have a look at the
+            mBART50 and m2m models, which allow translation between any of 50 and 100 languages.
+        </li>
+        <li>The input in the demo is currently limited to 100 characters, as a slow CPU server is serving the requests.
+            If you run it locally or with <a
+                    href="https://colab.research.google.com/drive/1X47vgSiOphpxS5w_LPtjQgJmiSTNfRNC?usp=sharing"
+                    target="_blank">Google Colab</a>, you can translate arbitrary long documents.
+        </li>
+        <li>See the <a href="https://colab.research.google.com/drive/1X47vgSiOphpxS5w_LPtjQgJmiSTNfRNC?usp=sharing"
+                       target="_blank">Google Colab example</a> for testing the other models and for faster translation
+            speed.
+        </li>
+    </ul>
+
+
+</div>
+
+<script>
+    let url = "http://localhost:24080";
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            langs: {
+                    "af": "Afrikaans",
+                    "ar": "Arabic",
+                    "az": "Azerbaijani",
+                    "bn": "Bengali",
+                    "my": "Burmese",
+                    "zh": "Chinese",
+                    "hr": "Croatian",
+                    "cs": "Czech",
+                    "nl": "Dutch",
+                    "en": "English",
+                    "et": "Estonian",
+                    "fi": "Finnish",
+                    "fr": "French",
+                    "gl": "Galician",
+                    "ka": "Georgian",
+                    "de": "German",
+                    "gu": "Gujarati",
+                    "he": "Hebrew",
+                    "hi": "Hindi",
+                    "id": "Indonesian",
+                    "it": "Italian",
+                    "ja": "Japanese",
+                    "kk": "Kazakh",
+                    "km": "Khmer",
+                    "ko": "Korean",
+                    "lv": "Latvian",
+                    "lt": "Lithuanian",
+                    "mk": "Macedonian",
+                    "ml": "Malayalam",
+                    "mr": "Marathi(Marāṭhī)",
+                    "mn": "Mongolian",
+                    "ne": "Nepali",
+                    "ps": "Pashto,Pushto",
+                    "fa": "Persian",
+                    "pl": "Polish",
+                    "pt": "Portuguese",
+                    "ro": "Romanian",
+                    "ru": "Russian",
+                    "si": "Sinhala,Sinhalese",
+                    "sl": "Slovene",
+                    "es": "Spanish",
+                    "sw": "Swahili",
+                    "sv": "Swedish",
+                    "tl": "Tagalog",
+                    "ta": "Tamil",
+                    "te": "Telugu",
+                    "th": "Thai",
+                    "tr": "Turkish",
+                    "uk": "Ukrainian",
+                    "ur": "Urdu",
+                    "vi": "Vietnamese",
+                    "xh": "Xhosa"
+            },
+            supported_langs: null,
+            allowed_target_langs: null,
+            is_translating: false,
+            translated_text: "",
+
+            source_lang: "",
+            target_lang: "en",
+            text: "",
+            detected_lang: null
+        },
+        methods: {
+            detectLang: function() { //Method to detect the language of the text
+                //No need for lang detection if we have selected source lang
+                if(this.source_lang !== "") {
+                    return;
+                }
+
+                //Timer, so that we perform lang detection with some delay
+                if (this.timer) {
+                    clearTimeout(this.timer);
+                    this.timer = null;
+                }
+                this.timer = setTimeout(() => {
+                    axios.get(url + '/language_detection?text='+encodeURIComponent(this.text))
+                        .then(response => (this.detected_lang = response.data))
+                }, 500);
+            },
+            translateText: function() { //Translates the text
+                 let translate_url = url+"/translate?target_lang=" + this.target_lang + "&source_lang=" + this.source_lang + "&text=" + encodeURIComponent(this.text);
+                 this.is_translating = true;
+                axios.get(translate_url)
+                    .then((response) => this.translated_text = response.data['translated'][0])
+                    .catch((error) => this.translated_text = "Error: "+error.response.data.detail)
+                    .then(() => this.is_translating = false);
+            }
+        },
+        watch: {
+            text: function() {
+                if(this.text.length >= 4) {
+                    this.detectLang();
+                }
+            },
+            detected_lang: function() {
+                axios.get(url + '/get_languages?source_lang='+encodeURIComponent(this.detected_lang))
+                    .then(response => (this.allowed_target_langs = response.data))
+            }
+        },
+        computed: {
+            source_langs: function() {
+                let filtered_langs = {};
+                if(this.supported_langs !== null) {
+
+                    for(const [code, lang] of Object.entries(this.langs)) {
+                        if(this.supported_langs.includes(code)) {
+                            filtered_langs[code] = lang;
+                        }
+                    }
+                }
+                return filtered_langs;
+            },
+            target_langs: function() {
+                let target_langs = [];
+
+                if(this.allowed_target_langs === null) {
+                    this.allowed_target_langs = Object.keys(this.langs);
+                }
+
+                for(const [code, lang] of Object.entries(this.source_langs)) {
+                    target_langs.push({code: code, lang: lang, disabled: !this.allowed_target_langs.includes(code)})
+                }
+
+                target_langs = target_langs.sort(function (a, b) {
+                    if(a.disabled === b.disabled) {
+                        return a.lang < b.lang ? -1 : 1;
+                    } else {
+                        return a.disabled ? 1 : -1;
+                    }
+                });
+
+                return target_langs;
+            }
+        },
+        created() {
+            //Get the supported languages
+            axios.get(url + '/get_languages')
+                .then(response => (this.supported_langs = response.data))
+        }
+    })
+
+    function translate_text() {
+        let text = $('#text').val();
+        let source_lang = $('#source_lang').val();
+        let target_lang = $('#target_lang').val();
+
+        let url = "http://localhost:24080/translate/" + target_lang + "?source_lang=" + source_lang + "&text=" + encodeURIComponent(text);
+
+        $('#translate_button').prop("disabled", true);
+
+        $('#output').html('<i class="fas fa-spinner fa-spin"></i> Please wait. A slow $10 CPU machine is translating your text. If it takes more than a second, the respective model must be downloaded which takes up to 60 seconds.');
+        $.get(url, function (data) {
+            $("#output").text(data['translated']);
+        }).fail(function (data) {
+            try {
+                $("#output").text("Error: " + data.responseJSON['detail']);
+            } catch (e) {
+                $("#output").text("Server responded with an error");
+            }
+        }).always(function () {
+            $('#translate_button').prop("disabled", false);
+        });
+    }
+</script>
+
+</body>
+</html>

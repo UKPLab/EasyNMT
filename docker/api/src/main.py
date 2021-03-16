@@ -13,7 +13,6 @@ import http3
 
 
 
-
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -32,7 +31,7 @@ print("Booted as backend: {}".format(IS_BACKEND))
 
 
 model_name = os.getenv('EASYNMT_MODEL', 'opus-mt')
-model_args = json.loads(os.getenv('EASYNMT_MODEL_ARGS', '{}') )
+model_args = json.loads(os.getenv('EASYNMT_MODEL_ARGS', '{}'))
 print("Load model: "+ model_name)
 model = EasyNMT(model_name, load_translator=IS_BACKEND, **model_args)
 
@@ -41,7 +40,7 @@ model = EasyNMT(model_name, load_translator=IS_BACKEND, **model_args)
 @app.get("/translate")
 async def translate(target_lang: str, text: List[str] = Query([]), source_lang: Optional[str] = '', beam_size: Optional[int] = 5, perform_sentence_splitting: Optional[bool] = True):
     """
-    Translation
+    Translates the text to the given target language.
     :param text: Text that should be translated
     :param target_lang: Target language
     :param source_lang: Language of text. Optional, if empty: Automatic language detection
@@ -124,6 +123,7 @@ async def get_languages(source_lang: Optional[str] = None, target_lang: Optional
     :return:
     """
     return model.get_languages(source_lang=source_lang, target_lang=target_lang)
+
 
 
 @app.get("/language_detection")

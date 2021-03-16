@@ -34,7 +34,6 @@ EXPOSE 80
 
 # Create cache folders
 RUN mkdir /cache/
-VOLUME /cache
 RUN mkdir /cache/easynmt
 RUN mkdir /cache/transformers
 RUN mkdir /cache/torch
