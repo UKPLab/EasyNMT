@@ -44,10 +44,10 @@ async def translate(target_lang: str, text: List[str] = Query([]), source_lang: 
     Translation
     :param text: Text that should be translated
     :param target_lang: Target language
-    :param source_lang: Language of text (optional)
-    :param beam_size: Beam size
-    :param perform_sentence_splitting: Split longer documents into individual sentences for translation
-    :return:  Returns a json with the entries:
+    :param source_lang: Language of text. Optional, if empty: Automatic language detection
+    :param beam_size: Beam size. Optional
+    :param perform_sentence_splitting: Split longer documents into individual sentences for translation. Optional
+    :return:  Returns a json with the translated text
     """
 
     if not IS_BACKEND:
@@ -98,17 +98,31 @@ async def translate(target_lang: str, text: List[str] = Query([]), source_lang: 
 
 @app.post("/translate")
 async def translate_post(request: Request):
+    """
+    Post method for translation
+    :return:
+    """
     data = await request.json()
     return await translate(**data)
 
 
 @app.get("/lang_pairs")
 async def lang_pairs():
+    """
+    Returns the language pairs from the model
+    :return:
+    """
     return model.lang_pairs
 
 
 @app.get("/get_languages")
 async def get_languages(source_lang: Optional[str] = None, target_lang: Optional[str] = None):
+    """
+    Returns the languages the model supports
+    :param source_lang: Optional. Only return languages with this language as source
+    :param target_lang: Optional. Only return languages with this language as target
+    :return:
+    """
     return model.get_languages(source_lang=source_lang, target_lang=target_lang)
 
 
@@ -140,7 +154,7 @@ async def language_detection_post(request: Request):
 
 
 @app.get("/model_name")
-async def lang_pairs():
+async def model_name():
     """
     Returns the name of the loaded model
     :return: EasyNMT model name
