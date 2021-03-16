@@ -15,8 +15,9 @@ At the moment, we provide the following models:
 
 
 **Examples:**
- - [EasyNMT Google Colab Example](https://colab.research.google.com/drive/1X47vgSiOphpxS5w_LPtjQgJmiSTNfRNC?usp=sharing)
- - [EasyNMT Opus-MT Online Demo](http://easynmt.net/demo)
+ - [EasyNMT Google Colab Example](https://colab.research.google.com/drive/1X47vgSiOphpxS5w_LPtjQgJmiSTNfRNC?usp=sharing) - Step-by-step example how to use EasyNMT with Python.
+ - [EasyNMT Opus-MT Online Demo](http://easynmt.net/demo) - Demo to test the translation quality of the Opus-MT model.
+- [EasyNMT Google Colab REST API Hosting](https://colab.research.google.com/drive/1kAh_Vt1ipA5-BuoaPX39rCIHFrhpcRpW?usp=sharing) - Example how to host a translation REST API on Google Colab and using the free GPU.
 
 
 ## Docker & REST-API
@@ -32,6 +33,8 @@ http://localhost:24080/translate?target_lang=en&text=Hallo%20Welt
 ```
 
 See [docker/](docker/) for more information on the different Docker images and the REST API endpoints.
+
+Also check our [EasyNMT Google Colab REST API Hosting](https://colab.research.google.com/drive/1kAh_Vt1ipA5-BuoaPX39rCIHFrhpcRpW?usp=sharing) example, on how to use Google Colab and the free GPU to host a translation API.
 
 ## Installation for Python
 You can install the package via:
