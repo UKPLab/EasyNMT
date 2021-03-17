@@ -27,7 +27,7 @@ This should yield the following JSON:
     "translated": [
         "Hello world"
     ],
-    "translation_time": 22.163145542144775
+    "translation_time": 0.163145542144775
 }
 ```
 If you have started it with a different port, replace `24080` with the port you chose.
