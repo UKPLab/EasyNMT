@@ -1,5 +1,8 @@
 """
-This script show how we can do translation using multiple processes
+This script show how we can do translation using multiple processes. Using this method only makes sense if you have multiple GPUs and want to encode on those.
+If your code runs on a CPU machine, you will not experience a speed-up. 
+
+Currently the code only works for the OPUS-MT model.
 
 Usage:
 python translation_speed.py model_name
