@@ -353,7 +353,7 @@ class EasyNMT:
                     yield trans_doc
                 batch = []
 
-        if len(batch) >= chunk_size:
+        if len(batch) > 0:
             translated = self.translate(batch, show_progress_bar=False, **kwargs)
             for trans_doc in translated:
                 yield trans_doc
