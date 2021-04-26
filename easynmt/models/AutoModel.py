@@ -1,4 +1,4 @@
-from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, AutoConfig
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 import torch
 from typing import List
 import logging
@@ -9,20 +9,27 @@ logger = logging.getLogger(__name__)
 
 
 class AutoModel:
-    def __init__(self, easynmt_path, model_name: str, lang_map=None, tokenizer_args=None):
+    def __init__(self, model_name: str, tokenizer_name: str = None, easynmt_path: str = None, lang_map=None, tokenizer_args=None):
         if tokenizer_args is None:
             tokenizer_args = {}
 
         if lang_map is None:
             lang_map = {}
 
+        if tokenizer_name is None:
+            tokenizer_name = model_name
+
         self.lang_map = lang_map
         self.tokenizer_args = tokenizer_args
+
         if model_name == ".":
             model_name = easynmt_path
 
+        if tokenizer_name == ".":
+            tokenizer_name = easynmt_path
+
         self.model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name, **self.tokenizer_args)
+        self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name, **self.tokenizer_args)
 
 
     def translate_sentences(self, sentences: List[str], source_lang: str, target_lang: str, device: str, beam_size: int = 5, **kwargs):
@@ -53,6 +60,7 @@ class AutoModel:
         self.tokenizer.save_pretrained(output_path)
         return {
             "model_name": ".",
+            "tokenizer_name": ".",
             "lang_map": self.lang_map,
             "tokenizer_args": self.tokenizer_args
         }

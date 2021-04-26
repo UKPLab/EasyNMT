@@ -17,9 +17,8 @@ import os
 
 logger = logging.getLogger(__name__)
 
-
 class EasyNMT:
-    def __init__(self, model_name: str, cache_folder: str = None, translator=None, load_translator: bool = True, device=None, max_length: int = None, **kwargs):
+    def __init__(self, model_name: str = None, cache_folder: str = None, translator=None, load_translator: bool = True, device=None, max_length: int = None, **kwargs):
         """
         Easy-to-use, state-of-the-art machine translation
         :param model_name:  Model name (see Readme for available models)
@@ -33,6 +32,7 @@ class EasyNMT:
         self._model_name = model_name
         self._fasttext_lang_id = None
         self._lang_detectors = [self.language_detection_fasttext, self.language_detection_langid, self.language_detection_langdetect]
+        self._lang_pairs = frozenset()
 
         if device is None:
             device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -84,11 +84,12 @@ class EasyNMT:
             with open(os.path.join(model_path, 'easynmt.json')) as fIn:
                 self.config = json.load(fIn)
 
-            self._lang_pairs = frozenset(self.config['lang_pairs'])
+            if 'lang_pairs' in self.config:
+                self._lang_pairs = frozenset(self.config['lang_pairs'])
 
             if load_translator:
                 module_class = import_from_string(self.config['model_class'])
-                self.translator = module_class(model_path, **self.config['model_args'])
+                self.translator = module_class(easynmt_path=model_path, **self.config['model_args'])
                 self.translator.max_length = max_length
 
 

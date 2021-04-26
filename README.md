@@ -106,9 +106,9 @@ The following models are currently available. They provide translations between 
 | Model | Reference | #Languages | Size | Speed GPU (Sentences/Sec on V100) | Speed CPU (Sentences/Sec) | Comment |
 | --- | --- | :---: | :---: | :---: | :---: | --- |
 | opus-mt | [Helsinki-NLP](https://github.com/Helsinki-NLP/Opus-MT) | 186 | 300 MB | 53 | 6 | Inidivudal models  (~300 MB) per translation direction
-| mbart50_m2m | [Facebook Research](https://github.com/pytorch/fairseq/tree/master/examples/multilingual) | 52 |  1.2 GB | 35  | 0.9| 
-| m2m_100_418M | [Facebook Research](https://github.com/pytorch/fairseq/tree/master/examples/m2m_100) | 100 | 0.9 GB | 39 | 1.1 | 
-| m2m_100_1.2B | [Facebook Research](https://github.com/pytorch/fairseq/tree/master/examples/m2m_100) | 100 | 2.4 GB | 23 |0.5 | 
+| mbart50_m2m | [Facebook Research](https://github.com/pytorch/fairseq/tree/master/examples/multilingual) | 52 |  2.3 GB | 35  | 0.9| 
+| m2m_100_418M | [Facebook Research](https://github.com/pytorch/fairseq/tree/master/examples/m2m_100) | 100 | 1.8 GB | 39 | 1.1 | 
+| m2m_100_1.2B | [Facebook Research](https://github.com/pytorch/fairseq/tree/master/examples/m2m_100) | 100 | 5.0 GB | 23 |0.5 | 
 
 ## Translation Quality
 

@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class OpusMT:
-    def __init__(self, easynmt_path, max_loaded_models: int = 10):
+    def __init__(self, easynmt_path: str = None, max_loaded_models: int = 10):
         self.models = {}
         self.max_loaded_models = max_loaded_models
         self.max_length = None
