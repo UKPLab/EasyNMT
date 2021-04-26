@@ -107,6 +107,8 @@ The following models are currently available. They provide translations between 
 | --- | --- | :---: | :---: | :---: | :---: | --- |
 | opus-mt | [Helsinki-NLP](https://github.com/Helsinki-NLP/Opus-MT) | 186 | 300 MB | 53 | 6 | Inidivudal models  (~300 MB) per translation direction
 | mbart50_m2m | [Facebook Research](https://github.com/pytorch/fairseq/tree/master/examples/multilingual) | 52 |  2.3 GB | 35  | 0.9| 
+| mbart50_m2en | [Facebook Research](https://github.com/pytorch/fairseq/tree/master/examples/multilingual) | 52 |  2.3 GB | 35  | 0.9 | Can only translate from the other languages to English. 
+| mbart50_en2m | [Facebook Research](https://github.com/pytorch/fairseq/tree/master/examples/multilingual) | 52 |  2.3 GB | 35  | 0.9 | Can only translate from English to the other languages. 
 | m2m_100_418M | [Facebook Research](https://github.com/pytorch/fairseq/tree/master/examples/m2m_100) | 100 | 1.8 GB | 39 | 1.1 | 
 | m2m_100_1.2B | [Facebook Research](https://github.com/pytorch/fairseq/tree/master/examples/m2m_100) | 100 | 5.0 GB | 23 |0.5 | 
 
@@ -131,7 +133,7 @@ The system will automatically detect the suitable Opus-MT model and load it. Wit
 
 ## mBERT_50
 
-We provide a wrapper for the [mBART50](https://arxiv.org/abs/2008.00401) model from Facebook, that is able to translate between any pair of 50+ languages.
+We provide a wrapper for the [mBART50](https://arxiv.org/abs/2008.00401) model from Facebook, that is able to translate between any pair of 50+ languages. There are also models available to translate from English to these languages or vice versa.
 
 
 

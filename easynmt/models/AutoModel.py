@@ -48,9 +48,9 @@ class AutoModel:
             inputs[key] = inputs[key].to(device)
 
         with torch.no_grad():
-            translated = self.model.generate(**inputs, num_beams=beam_size,
-                                             forced_bos_token_id=self.tokenizer.lang_code_to_id[target_lang],
-                                             **kwargs)
+            if hasattr(self.tokenizer, 'lang_code_to_id'):
+                kwargs['forced_bos_token_id'] = self.tokenizer.lang_code_to_id[target_lang]
+            translated = self.model.generate(**inputs, num_beams=beam_size, **kwargs)
             output = [self.tokenizer.decode(t, skip_special_tokens=True) for t in translated]
 
         return output
