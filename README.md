@@ -154,8 +154,8 @@ We provide a wrapper for the [M2M 100](https://arxiv.org/abs/2010.11125) model f
 
 
 As the moment, we provide wrapper for two M2M 100 models:
-- **m2m_100_418M**: M2M model with 418 million parameters (0.9 GB)
-- **m2m_100_1.2B**: M2M model with 1.2 billion parameters (2.4 GB)
+- **m2m_100_418M**: M2M model with 418 million parameters (1.8 GB)
+- **m2m_100_1.2B**: M2M model with 1.2 billion parameters (5.0 GB)
 
 **Usage:**
 ```python
