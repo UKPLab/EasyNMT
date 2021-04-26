@@ -10,7 +10,8 @@ RUN pip install --no-cache-dir torch==1.8.0+cpu -f https://download.pytorch.org/
 RUN apt-get update && apt-get -y install build-essential
 RUN pip install --no-cache-dir "uvicorn[standard]" gunicorn fastapi
 COPY ./requirements.txt /requirements.txt
-RUN pip install -r /requirements.txt
+RUN pip install --no-cache-dir -r /requirements.txt
+RUN python -m nltk.downloader 'punkt'
 
 #### Scripts to start front- and backend worker
 

@@ -1,7 +1,7 @@
 #!/bin/sh
 #This version build the docker hub containers
 
-VERSION="1.1"
+VERSION="2.0"
 
 docker build -t easynmt/api:${VERSION}-cpu -f api/cpu.dockerfile api/
 docker push easynmt/api:${VERSION}-cpu
