@@ -44,7 +44,7 @@ class EasyNMT:
             if 'EASYNMT_CACHE' in os.environ:
                 cache_folder = os.environ['EASYNMT_CACHE']
             else:
-                cache_folder = os.path.join(torch.hub._get_torch_home(), 'easynmt')
+                cache_folder = os.path.join(torch.hub._get_torch_home(), 'easynmt_v2')
         self._cache_folder = cache_folder
 
         if translator is not None:
