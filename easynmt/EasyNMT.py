@@ -1,6 +1,6 @@
 import os
 import torch
-from .util import http_get, import_from_string
+from .util import http_get, import_from_string, fullname
 import json
 from . import __DOWNLOAD_SERVER__
 from typing import List, Union, Dict, FrozenSet, Set, Iterable
@@ -13,6 +13,7 @@ import math
 import re
 import logging
 import time
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -87,7 +88,7 @@ class EasyNMT:
 
             if load_translator:
                 module_class = import_from_string(self.config['model_class'])
-                self.translator = module_class(model_path, **kwargs)
+                self.translator = module_class(model_path, **self.config['model_args'])
                 self.translator.max_length = max_length
 
 
@@ -485,3 +486,17 @@ class EasyNMT:
 
         return sorted(list(langs))
 
+
+    def save(self, output_path):
+        os.makedirs(output_path, exist_ok=True)
+
+        filepath = os.path.join(output_path, 'easynmt.json')
+
+        config = {
+            'model_class': fullname(self.translator),
+            'lang_pairs': list(self.lang_pairs),
+            'model_args': self.translator.save(output_path)
+        }
+
+        with open(filepath, 'w') as fOut:
+            json.dump(config, fOut)

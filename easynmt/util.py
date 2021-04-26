@@ -60,3 +60,15 @@ def import_from_string(dotted_path):
     except AttributeError:
         msg = 'Module "%s" does not define a "%s" attribute/class' % (module_path, class_name)
         raise ImportError(msg)
+
+def fullname(o):
+  """
+  Gives a full name (package_name.class_name) for a class / object in Python. Will
+  be used to load the correct classes from JSON files
+  """
+
+  module = o.__class__.__module__
+  if module is None or module == str.__class__.__module__:
+    return o.__class__.__name__  # Avoid reporting __builtin__
+  else:
+    return module + '.' + o.__class__.__name__

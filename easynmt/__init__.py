@@ -1,5 +1,5 @@
-__version__ = "1.1.0"
-__DOWNLOAD_SERVER__ = 'http://easynmt.net/models'
+__version__ = "2.0.0"
+__DOWNLOAD_SERVER__ = 'http://easynmt.net/models/v2'
 
 
 from .EasyNMT import EasyNMT

@@ -1,7 +1,5 @@
 import time
 from transformers import MarianMTModel, MarianTokenizer
-import os
-import json
 import torch
 from typing import List
 import logging
@@ -10,13 +8,8 @@ logger = logging.getLogger(__name__)
 
 
 class OpusMT:
-    def __init__(self, model_path: str, max_loaded_models: int = 10):
-        self.model_path = model_path
+    def __init__(self, easynmt_path, max_loaded_models: int = 10):
         self.models = {}
-
-        with open(os.path.join(model_path, 'easynmt.json'), encoding='utf8') as fIn:
-            self.config = json.load(fIn)
-
         self.max_loaded_models = max_loaded_models
         self.max_length = None
 
@@ -47,7 +40,7 @@ class OpusMT:
         tokenizer, model = self.load_model(model_name)
         model.to(device)
 
-        inputs = tokenizer.prepare_seq2seq_batch(sentences, max_length=self.max_length, return_tensors="pt")
+        inputs = tokenizer(sentences, truncation=True, padding=True, max_length=self.max_length, return_tensors="pt")
 
         for key in inputs:
             inputs[key] = inputs[key].to(device)
@@ -57,4 +50,7 @@ class OpusMT:
             output = [tokenizer.decode(t, skip_special_tokens=True) for t in translated]
 
         return output
+
+    def save(self, output_path):
+        return {"max_loaded_models": self.max_loaded_models}
 
