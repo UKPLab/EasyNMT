@@ -412,7 +412,7 @@ class EasyNMT:
 
         raise Exception("No method for automatic language detection was found. Please install at least one of the following: fasttext (pip install fasttext), langid (pip install langid), or langdetect (pip install langdetect)")
 
-    def language_detection_fasttext(self, text: str) -> str:
+    def language_detection_fasttext(self, text: str, compressed_model=True) -> str:
         """
         Given a text, detects the language code and returns the ISO language code. It supports 176 languages. Uses
         the fasttext model for language detection:
@@ -422,14 +422,17 @@ class EasyNMT:
 
         """
         if self._fasttext_lang_id is None:
+            if compressed_model:
+                model_filename = 'lid.176.ftz'
+            else:
+                model_filename = 'lid.176.bin'
+
             import fasttext
             fasttext.FastText.eprint = lambda x: None   #Silence useless warning: https://github.com/facebookresearch/fastText/issues/1067
-            model_path = os.path.join(self._cache_folder, 'lid.176.ftz')
+            model_path = os.path.join(self._cache_folder, model_filename)
             if not os.path.exists(model_path):
-                http_get('https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.ftz', model_path)
+                http_get(f'https://dl.fbaipublicfiles.com/fasttext/supervised-models/{model_filename}', model_path)
             self._fasttext_lang_id = fasttext.load_model(model_path)
-
-        return self._fasttext_lang_id.predict(text.lower().replace("\r\n", " ").replace("\n", " ").strip())[0][0].split('__')[-1]
 
     def language_detection_langid(self, text: str) -> str:
         import langid
