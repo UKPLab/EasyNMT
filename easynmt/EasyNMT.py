@@ -258,9 +258,12 @@ class EasyNMT:
                 logger.info("Translate sentences of language: {}".format(lng))
                 try:
                     grouped_sentences = [sentences[idx] for idx in ids]
-                    translated = self.translate_sentences(grouped_sentences, source_lang=lng, target_lang=target_lang, show_progress_bar=show_progress_bar, beam_size=beam_size, batch_size=batch_size, **kwargs)
-                    for idx, translated_sentences in zip(ids, translated):
-                        output[idx] = translated_sentences
+                    if lng + '-' + target_lang in self._lang_pairs:
+                        translated = self.translate_sentences(grouped_sentences, source_lang=lng, target_lang=target_lang, show_progress_bar=show_progress_bar, beam_size=beam_size, batch_size=batch_size, **kwargs)
+                        for idx, translated_sentences in zip(ids, translated):
+                            output[idx] = translated_sentences
+                    else:
+                        logger.info("Could not translate: {}".format(lng))
                 except Exception as e:
                     logger.warning("Exception: "+str(e))
                     raise e
