@@ -4,6 +4,7 @@ from .util import http_get, import_from_string, fullname
 import json
 from . import __DOWNLOAD_SERVER__
 from typing import List, Union, Dict, FrozenSet, Set, Iterable
+from collections import Counter
 import numpy as np
 import tqdm
 import nltk
@@ -242,7 +243,7 @@ class EasyNMT:
         if source_lang is None:
             #Determine languages for sentences
             src_langs = [self.language_detection(sent) for sent in sentences]
-            logger.info("Detected languages: {}".format(set(src_langs)))
+            logger.info("Detected languages: {}".format(Counter(src_langs).most_common()))
 
             #Group by languages
             lang2id = {}
