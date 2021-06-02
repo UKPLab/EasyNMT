@@ -156,7 +156,10 @@ class EasyNMT:
             if is_single_doc and len(output) == 1:
                 output = output[0]
 
-            return output
+            if source_lang:
+                return output
+            else:
+                return output, src_langs
 
 
         if perform_sentence_splitting:
@@ -283,7 +286,10 @@ class EasyNMT:
         if is_single_sentence:
             output = output[0]
 
-        return output
+        if source_lang:
+            return output
+        else:
+            return output, src_langs
 
 
 
