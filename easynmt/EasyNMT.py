@@ -112,7 +112,7 @@ class EasyNMT:
         :param sentence_splitter: Method used to split sentences. If None, uses the default self.sentence_splitting method
         :param document_language_detection: Perform language detection on document level
         :param kwargs: Optional arguments for the translator model
-        :return: Returns a string or a list of string with the translated documents
+        :return: When source_lang is given, returns a string or a list of string with the translated documents. When source_lang is not given, returns a tuple that also contains a list of detected languages.
         """
 
         #Method_args will store all passed arguments to method
@@ -230,7 +230,8 @@ class EasyNMT:
         :param show_progress_bar: Show a progress bar
         :param beam_size: Size for beam search
         :param batch_size: Mini batch size
-        :return: List of translated sentences
+        :return: When source_lang is given, returns a list of translated sentences. When source_lang is not given, returns a tuple of translated sentences and detected languages.
+
         """
 
         if source_lang == target_lang:
