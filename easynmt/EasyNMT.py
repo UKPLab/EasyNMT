@@ -144,11 +144,14 @@ class EasyNMT:
             for lng, ids in lang2id.items():
                 logger.info("Translate documents of language: {}".format(lng))
                 try:
-                    method_args['documents'] = [documents[idx] for idx in ids]
-                    method_args['source_lang'] = lng
-                    translated = self.translate(**method_args)
-                    for idx, translated_sentences in zip(ids, translated):
-                        output[idx] = translated_sentences
+                    if lng + '-' + target_lang in self._lang_pairs:
+                        method_args['documents'] = [documents[idx] for idx in ids]
+                        method_args['source_lang'] = lng
+                        translated = self.translate(**method_args)
+                        for idx, translated_sentences in zip(ids, translated):
+                            output[idx] = translated_sentences
+                    else:
+                        logger.info("Could not translate: {}".format(lng))
                 except Exception as e:
                     logger.warning("Exception: "+str(e))
                     raise e
