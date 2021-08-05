@@ -24,7 +24,7 @@ At the moment, we provide the following models:
 
 We provide ready-to-use Docker images, that wrap EasyNMT in a REST API:
 ```
-docker run -p 24080:80 easynmt/api:1.1-cpu
+docker run -p 24080:80 easynmt/api:2.0-cpu
 ```
 
 Calling the REST API:
