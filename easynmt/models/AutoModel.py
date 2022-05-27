@@ -42,7 +42,7 @@ class AutoModel:
             target_lang = self.lang_map[target_lang]
 
         self.tokenizer.src_lang = source_lang
-        inputs = self.tokenizer(sentences, truncation=True, padding=True, return_tensors="pt")
+        inputs = self.tokenizer(sentences, truncation=True, padding=True, return_tensors="pt", max_length=self.max_length)
 
         for key in inputs:
             inputs[key] = inputs[key].to(device)
