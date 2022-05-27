@@ -9,7 +9,7 @@ To start the EasyNMT REST API on port `24080`run the following docker command:
 docker run -p 24080:80 easynmt/api:2.0-cpu
 ```
 
-This uses the CPU image. If you have GPU (CUDA), there are various GPU images available. Have a look at our [Docker Hub Page](https://hub.docker.com/r/easynmt/api/tags?page=1&ordering=last_updated).
+This uses the CPU image. If you have **GPU (CUDA)**, there are various GPU images available. Have a look at our [Docker Hub Page](https://hub.docker.com/r/easynmt/api/tags?page=1&ordering=last_updated).
 
 
 ## Usage
