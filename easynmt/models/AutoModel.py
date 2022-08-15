@@ -30,6 +30,7 @@ class AutoModel:
 
         self.model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name, **self.tokenizer_args)
+        self.max_length = None
 
 
     def translate_sentences(self, sentences: List[str], source_lang: str, target_lang: str, device: str, beam_size: int = 5, **kwargs):
@@ -42,7 +43,7 @@ class AutoModel:
             target_lang = self.lang_map[target_lang]
 
         self.tokenizer.src_lang = source_lang
-        inputs = self.tokenizer(sentences, truncation=True, padding=True, return_tensors="pt")
+        inputs = self.tokenizer(sentences, truncation=True, padding=True, max_length=self.max_length, return_tensors="pt")
 
         for key in inputs:
             inputs[key] = inputs[key].to(device)
