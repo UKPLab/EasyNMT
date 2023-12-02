@@ -1,6 +1,6 @@
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 import torch
-from torch.cuda.amp import autocast, GradScaler
+from torch.cuda.amp import autocast
 from typing import List
 import logging
 
@@ -43,7 +43,7 @@ class AutoModel:
         self.max_length = 512  # Set a smaller value for low memory GPUs
 
 
-    def translate_sentences(self, sentences: List[str], source_lang: str, target_lang: str, device: str, beam_size: int = 5, **kwargs):
+    def translate_sentences(self, sentences: List[str], source_lang: str, target_lang: str, device: str, beam_size: int = 5, with_autocast: bool = False, **kwargs):
         """
         Translates a list of sentences from a source language to a target language.
 
@@ -53,6 +53,7 @@ class AutoModel:
             target_lang (str): The target language for translation.
             device (str): The device to be used for translation (e.g. "cuda").
             beam_size (int, optional): The beam size for translation. Defaults to 5.
+            with_autocast (bool, optional): Whether to use autocast for translation. Defaults to False.
             **kwargs: Additional keyword arguments to be passed to the translation model.
 
         Returns:
@@ -73,11 +74,17 @@ class AutoModel:
             inputs[key] = inputs[key].to(device)
 
         with torch.no_grad():
-            with autocast():
+            if with_autocast:
+                with autocast():
+                    if hasattr(self.tokenizer, 'lang_code_to_id'):
+                        kwargs['forced_bos_token_id'] = self.tokenizer.lang_code_to_id[target_lang]
+                    translated = self.model.generate(**inputs, num_beams=beam_size, **kwargs)
+            else:
                 if hasattr(self.tokenizer, 'lang_code_to_id'):
                     kwargs['forced_bos_token_id'] = self.tokenizer.lang_code_to_id[target_lang]
                 translated = self.model.generate(**inputs, num_beams=beam_size, **kwargs)
-                output = [self.tokenizer.decode(t, skip_special_tokens=True) for t in translated]
+            
+            output = [self.tokenizer.decode(t, skip_special_tokens=True) for t in translated]
 
         return output
 
