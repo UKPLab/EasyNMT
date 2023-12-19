@@ -131,7 +131,7 @@ model = EasyNMT('opus-mt', max_loaded_models=10)
 
 The system will automatically detect the suitable Opus-MT model and load it. With the optional parameter `max_loaded_models` you can specify the maximal number of models that are simoultanously loaded. If you then translate with an unseen language direction, the oldest model is unloaded and the new model is loaded.
 
-## mBERT_50
+## mBART_50
 
 We provide a wrapper for the [mBART50](https://arxiv.org/abs/2008.00401) model from Facebook, that is able to translate between any pair of 50+ languages. There are also models available to translate from English to these languages or vice versa.
 
